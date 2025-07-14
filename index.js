@@ -101,6 +101,13 @@ var TCPServer = net.createServer(function(socket) {
         case "trigger":
 
         break;
+        case "ping":
+          console.log("Server pinged");
+          sendMessage = "<state episode='mx' mission='mx_briefing' value='start'/>";
+        break;
+        case "resendUrl":
+          console.log("Resend URL for webstill");
+        break;
       }
     }
     if(sendMessage.length > 0)
