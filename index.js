@@ -9,6 +9,20 @@ const options = {
 
 const parser = new XMLParser(options);
 
+function padMissionPass(num) {
+    var s = "000000000000" + num;
+    return s.substr(s.length-12);
+}
+let missionPass = 1;
+
+let missionPasses = {
+  "000000159001": {
+    "fieldStation": "Norway",
+    "timestamp": 1252854000, //Sunday, September 13, 2009 11:00:00 AM GMT-04:00 DST
+    "party": 2
+  }
+};
+
 /* Packet Documentation
 - state @ Keeps the device up to date on what mission they are playing
   - episode @ The pavilion
@@ -86,7 +100,7 @@ var TCPServer = net.createServer(function(socket) {
             break;
           }
           //sendMessage = "<reconnect language='en' ip='192.168.0.111'/>";
-          sendMessage = "<state episode='mx' mission='mx_briefing' value='start'/>";
+          sendMessage = "<state language='en' episode='mx' mission='mx_briefing' value='start'/>";
           //sendMessage += "<broadcast text='mx_0010' halt='true' />";
         break;
         case "missionComplete":
@@ -102,8 +116,7 @@ var TCPServer = net.createServer(function(socket) {
 
         break;
         case "ping":
-          console.log("Server pinged");
-          sendMessage = "<state episode='mx' mission='mx_briefing' value='start'/>";
+          sendMessage = "<state value='ping'/>";
         break;
         case "resendUrl":
           console.log("Resend URL for webstill");
@@ -121,6 +134,10 @@ var TCPServer = net.createServer(function(socket) {
   
   socket.on('end', () => {
     console.log('Client disconnected');
+  });
+
+  socket.on('close', () => {
+    console.log('Socket fully closed');
   });
   
   socket.on('error', (err) => {
@@ -155,6 +172,12 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(data);
       });
+    break;
+    case "/terminal/missionPass":
+      missionPass++;
+      console.log(padMissionPass(missionPass));
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end("");
     break;
     default:
       res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' });
