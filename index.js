@@ -99,6 +99,7 @@ var TCPServer = net.createServer(function(socket) {
             sendMessage = "<update url='http://192.168.0.111/updates/kp_test.kpp' />";
             break;
           }
+
           //sendMessage = "<reconnect language='en' ip='192.168.0.111'/>";
           sendMessage = "<state language='en' episode='mx' mission='mx_briefing' value='start'/>";
           //sendMessage += "<broadcast text='mx_0010' halt='true' />";
@@ -116,7 +117,7 @@ var TCPServer = net.createServer(function(socket) {
 
         break;
         case "ping":
-          sendMessage = "<state value='ping'/>";
+          sendMessage = "<state language='en' episode='mx' mission='mx_briefing' value='start'/>";
         break;
         case "resendUrl":
           console.log("Resend URL for webstill");
